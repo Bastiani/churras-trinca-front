@@ -1,0 +1,8 @@
+{
+  plugins: [
+    'relay',
+    {
+      schema: './src/schema.json'
+    }
+  ]
+}

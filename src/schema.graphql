@@ -1,0 +1,313 @@
+# Barbecue type definition
+type Barbecue implements Node {
+  # The ID of an object
+  id: ID!
+  _id: String
+
+  # Date of the barbecue
+  date: String!
+
+  # Description of the barbecue
+  description: String!
+
+  # Observation of the barbecue
+  observation: String!
+  participants(after: String, first: Int, before: String, last: Int): ParticipantConnection!
+
+  # Total
+  total: Float
+
+  # Active of the barbecue
+  active: Boolean
+}
+
+input BarbecueAddInput {
+  date: String!
+  description: String!
+  observation: String!
+  active: Boolean
+  clientMutationId: String
+}
+
+type BarbecueAddPayload {
+  barbecueEdge: BarbecueEdge
+  error: String
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type BarbecueConnection {
+  # Number of items in this connection
+  count: Int!
+
+  # A count of the total number of objects in this connection, ignoring pagination.
+  #   This allows a client to fetch the first five objects by passing "5" as the
+  #   argument to "first", then fetch the total count so it could display "5 of 83",
+  #   for example.
+  totalCount: Int!
+
+  # Offset from start
+  startCursorOffset: Int!
+
+  # Offset till end
+  endCursorOffset: Int!
+
+  # Information to aid in pagination.
+  pageInfo: PageInfoExtended!
+
+  # A list of edges.
+  edges: [BarbecueEdge]!
+}
+
+# An edge in a connection.
+type BarbecueEdge {
+  # The item at the end of the edge
+  node: Barbecue!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input BarbecueEditInput {
+  id: ID!
+  date: String!
+  description: String!
+  observation: String!
+  clientMutationId: String
+}
+
+type BarbecueEditPayload {
+  barbecue: Barbecue
+  error: String
+  clientMutationId: String
+}
+
+type Mutation {
+  UserChangePassword(input: UserChangePasswordInput!): UserChangePasswordPayload
+  UserLoginWithEmail(input: UserLoginWithEmailInput!): UserLoginWithEmailPayload
+  UserRegisterWithEmail(input: UserRegisterWithEmailInput!): UserRegisterWithEmailPayload
+  BarbecueAddMutation(input: BarbecueAddInput!): BarbecueAddPayload
+  BarbecueEditMutation(input: BarbecueEditInput!): BarbecueEditPayload
+  ParticipantAddMutation(input: ParticipantAddInput!): ParticipantAddPayload
+  ParticipantEditMutation(input: ParticipantEditInput!): ParticipantEditPayload
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfoExtended {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+# Participant type definition
+type Participant implements Node {
+  # The ID of an object
+  id: ID!
+  _id: String
+
+  # Participant
+  participant: User
+
+  # Barbecue
+  barbecue: Barbecue
+
+  # Value to contribute
+  total: Float
+
+  # Active of the participant
+  active: Boolean
+}
+
+input ParticipantAddInput {
+  # User id
+  participant: ID
+
+  # Barbecue id
+  barbecue: ID
+
+  # Total contribution
+  total: Float
+  active: Boolean
+  clientMutationId: String
+}
+
+type ParticipantAddPayload {
+  participantEdge: ParticipantEdge
+  error: String
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type ParticipantConnection {
+  # Number of items in this connection
+  count: Int!
+
+  # A count of the total number of objects in this connection, ignoring pagination.
+  #   This allows a client to fetch the first five objects by passing "5" as the
+  #   argument to "first", then fetch the total count so it could display "5 of 83",
+  #   for example.
+  totalCount: Int!
+
+  # Offset from start
+  startCursorOffset: Int!
+
+  # Offset till end
+  endCursorOffset: Int!
+
+  # Information to aid in pagination.
+  pageInfo: PageInfoExtended!
+
+  # A list of edges.
+  edges: [ParticipantEdge]!
+}
+
+# An edge in a connection.
+type ParticipantEdge {
+  # The item at the end of the edge
+  node: Participant!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input ParticipantEditInput {
+  id: ID!
+
+  # User id
+  participant: ID
+
+  # Barbecue id
+  barbecue: ID
+
+  # Total contribution
+  total: Float
+  active: Boolean
+  clientMutationId: String
+}
+
+type ParticipantEditPayload {
+  participant: Participant
+  error: String
+  clientMutationId: String
+}
+
+# The root of all... queries
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+  me: User
+  user(id: ID!): User
+  users(after: String, first: Int, before: String, last: Int, search: String): UserConnection
+  barbecue(id: ID!): Barbecue
+  barbecues(after: String, first: Int, before: String, last: Int, search: String): BarbecueConnection
+  participant(id: ID!): Participant
+  participants(after: String, first: Int, before: String, last: Int, search: String, barbecueIdArgs: ID): ParticipantConnection
+}
+
+type Subscription {
+  UserAdded: UserAddedPayload
+}
+
+# User data
+type User implements Node {
+  # The ID of an object
+  id: ID!
+  _id: String
+  name: String
+  email: String
+  active: Boolean
+}
+
+type UserAddedPayload {
+  userEdge: UserEdge
+}
+
+input UserChangePasswordInput {
+  oldPassword: String!
+
+  # user new password
+  password: String!
+  clientMutationId: String
+}
+
+type UserChangePasswordPayload {
+  error: String
+  me: User
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type UserConnection {
+  # Number of items in this connection
+  count: Int!
+
+  # A count of the total number of objects in this connection, ignoring pagination.
+  #   This allows a client to fetch the first five objects by passing "5" as the
+  #   argument to "first", then fetch the total count so it could display "5 of 83",
+  #   for example.
+  totalCount: Int!
+
+  # Offset from start
+  startCursorOffset: Int!
+
+  # Offset till end
+  endCursorOffset: Int!
+
+  # Information to aid in pagination.
+  pageInfo: PageInfoExtended!
+
+  # A list of edges.
+  edges: [UserEdge]!
+}
+
+# An edge in a connection.
+type UserEdge {
+  # The item at the end of the edge
+  node: User!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input UserLoginWithEmailInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type UserLoginWithEmailPayload {
+  token: String
+  error: String
+  clientMutationId: String
+}
+
+input UserRegisterWithEmailInput {
+  name: String!
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type UserRegisterWithEmailPayload {
+  token: String
+  error: String
+  clientMutationId: String
+}
+

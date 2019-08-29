@@ -1,12 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { RelayEnvironmentProvider } from 'relay-hooks';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import initEnvironment from './lib/createRelayEnvironment';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Home from './pages/Home';
+import Signin from './pages/Signin';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+ReactDOM.render(
+  <RelayEnvironmentProvider environment={initEnvironment()}>
+    <BrowserRouter>
+      <Switch>
+        <App>
+          <Route exact path="/" component={Home} />
+          <Route path="/signin" component={Signin} />
+        </App>
+      </Switch>
+    </BrowserRouter>
+  </RelayEnvironmentProvider>,
+  document.getElementById('root')
+);
+
 serviceWorker.unregister();

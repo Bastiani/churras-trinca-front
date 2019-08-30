@@ -1,32 +1,24 @@
-/**
- * @flow
- * @relayHash f61c692cd0ec2619c3bc970a376afb2e
- */
+/* tslint:disable */
 
-/* eslint-disable */
+import { ConcreteRequest } from "relay-runtime";
+type Home_query$ref = any;
+export type HomeQueryVariables = {};
+export type HomeQueryResponse = {
+    readonly " $fragmentRefs": Home_query$ref;
+};
+export type HomeQuery = {
+    readonly response: HomeQueryResponse;
+    readonly variables: HomeQueryVariables;
+};
 
-'use strict';
-
-/*::
-import type { ConcreteRequest } from 'relay-runtime';
-type Home_barbecues$ref = any;
-export type HomeQueryVariables = {||};
-export type HomeQueryResponse = {|
-  +$fragmentRefs: Home_barbecues$ref
-|};
-export type HomeQuery = {|
-  variables: HomeQueryVariables,
-  response: HomeQueryResponse,
-|};
-*/
 
 
 /*
 query HomeQuery {
-  ...Home_barbecues
+  ...Home_query
 }
 
-fragment Home_barbecues on Query {
+fragment Home_query on Query {
   barbecues(first: 2147483647) {
     edges {
       node {
@@ -60,7 +52,7 @@ fragment Home_barbecues on Query {
 }
 */
 
-const node/*: ConcreteRequest*/ = (function(){
+const node: ConcreteRequest = (function(){
 var v0 = [
   {
     "kind": "Literal",
@@ -93,7 +85,7 @@ return {
     "selections": [
       {
         "kind": "FragmentSpread",
-        "name": "Home_barbecues",
+        "name": "Home_query",
         "args": null
       }
     ]
@@ -266,7 +258,7 @@ return {
         "args": (v0/*: any*/),
         "handle": "connection",
         "key": "Home_barbecues",
-        "filters": null
+        "filters": []
       }
     ]
   },
@@ -274,11 +266,10 @@ return {
     "operationKind": "query",
     "name": "HomeQuery",
     "id": null,
-    "text": "query HomeQuery {\n  ...Home_barbecues\n}\n\nfragment Home_barbecues on Query {\n  barbecues(first: 2147483647) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query HomeQuery {\n  ...Home_query\n}\n\nfragment Home_query on Query {\n  barbecues(first: 2147483647) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-// prettier-ignore
-(node/*: any*/).hash = 'e2604909225239eab5437a58825b1d64';
-module.exports = node;
+(node as any).hash = 'c5fdb533ad607d7345d90218571ebb1f';
+export default node;

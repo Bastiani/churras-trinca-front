@@ -11,7 +11,7 @@ type Barbecue implements Node {
   description: String!
 
   # Observation of the barbecue
-  observation: String!
+  observation: String
   participants(after: String, first: Int, before: String, last: Int): ParticipantConnection!
 
   # Total
@@ -24,7 +24,7 @@ type Barbecue implements Node {
 input BarbecueAddInput {
   date: String!
   description: String!
-  observation: String!
+  observation: String
   active: Boolean
   clientMutationId: String
 }
@@ -70,9 +70,9 @@ type BarbecueEdge {
 
 input BarbecueEditInput {
   id: ID!
-  date: String!
-  description: String!
-  observation: String!
+  date: String
+  description: String
+  observation: String
   clientMutationId: String
 }
 

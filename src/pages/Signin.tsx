@@ -8,25 +8,26 @@ import SigninMutation from './mutations/SigninMutation';
 
 import { setToken } from '../security/authentication';
 
-const validationSchema = () => yup.object().shape({
-  email: yup
-    .string()
-    .email('Invalid email!')
-    .required('Email required!'),
-  password: yup.string().required('Password is required!'),
-});
+const validationSchema = () =>
+  yup.object().shape({
+    email: yup
+      .string()
+      .email('Invalid email!')
+      .required('Email required!'),
+    password: yup.string().required('Password is required!')
+  });
 
 const Signin = () => (
   <Formik
     initialValues={{
       email: '',
-      password: '',
+      password: ''
     }}
     validationSchema={validationSchema()}
     onSubmit={(values, { setSubmitting }) => {
-      const onCompleted = (res) => {
+      const onCompleted = (res: any) => {
         setSubmitting(false);
-        const response = res && res.UserLoginMutation;
+        const response = res && res.UserLoginWithEmail;
 
         if (response && response.error) {
           console.log('Erro', 'Erro ao tentar fazer login');

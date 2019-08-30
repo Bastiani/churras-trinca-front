@@ -1,50 +1,36 @@
-/**
- * @flow
- */
+/* tslint:disable */
 
-/* eslint-disable */
-
-'use strict';
-
-/*::
-import type { ReaderFragment } from 'relay-runtime';
-import type { FragmentReference } from "relay-runtime";
-declare export opaque type Home_barbecues$ref: FragmentReference;
-declare export opaque type Home_barbecues$fragmentType: Home_barbecues$ref;
-export type Home_barbecues = {|
-  +barbecues: ?{|
-    +edges: $ReadOnlyArray<?{|
-      +node: {|
-        +id: string,
-        +_id: ?string,
-        +date: string,
-        +description: string,
-        +observation: string,
-        +participants: {|
-          +edges: $ReadOnlyArray<?{|
-            +node: {|
-              +participant: ?{|
-                +name: ?string
-              |},
-              +total: ?number,
-            |}
-          |}>
-        |},
-        +total: ?number,
-      |}
-    |}>
-  |},
-  +$refType: Home_barbecues$ref,
-|};
-export type Home_barbecues$data = Home_barbecues;
-export type Home_barbecues$key = {
-  +$data?: Home_barbecues$data,
-  +$fragmentRefs: Home_barbecues$ref,
+import { ReaderFragment } from "relay-runtime";
+export type Home_query$ref = any;
+export type Home_query = {
+    readonly barbecues: {
+        readonly edges: ReadonlyArray<{
+            readonly node: {
+                readonly id: string;
+                readonly _id: string | null;
+                readonly date: string;
+                readonly description: string;
+                readonly observation: string | null;
+                readonly participants: {
+                    readonly edges: ReadonlyArray<{
+                        readonly node: {
+                            readonly participant: {
+                                readonly name: string | null;
+                            } | null;
+                            readonly total: number | null;
+                        };
+                    } | null>;
+                };
+                readonly total: number | null;
+            };
+        } | null>;
+    } | null;
+    readonly " $refType": Home_query$ref;
 };
-*/
 
 
-const node/*: ReaderFragment*/ = (function(){
+
+const node: ReaderFragment = (function(){
 var v0 = {
   "kind": "ScalarField",
   "alias": null,
@@ -54,7 +40,7 @@ var v0 = {
 };
 return {
   "kind": "Fragment",
-  "name": "Home_barbecues",
+  "name": "Home_query",
   "type": "Query",
   "metadata": {
     "connection": [
@@ -233,6 +219,5 @@ return {
   ]
 };
 })();
-// prettier-ignore
-(node/*: any*/).hash = 'e0669daae8e69f1b2e16c3d495c93d17';
-module.exports = node;
+(node as any).hash = '95454078869da911b4662a5438b4d7a1';
+export default node;

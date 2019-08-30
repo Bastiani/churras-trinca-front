@@ -1,53 +1,30 @@
-
 import { ConnectionHandler } from 'relay-runtime';
 import { isObject, isArray } from 'lodash/fp';
 
-import  { Store, RecordProxy, ConcreteNode } from 'relay-runtime';
+export const ROOT_ID = 'client:root';
 
-type ListRecordRemoveUpdaterOptions = {
-  parentId: string,
-  itemId: string,
-  parentFieldName: string,
-  store: Store,
-};
-
-type ListRecordAddUpdaterOptions = {
-  parentId: string,
-  item: Object,
-  type: string,
-  parentFieldName: string,
-  store: Store,
-};
-
-type OptimisticConnectionUpdaterOptions = {
-  parentId: string,
-  store: Store,
-  connectionName: string,
-  item: Object,
-  customNode: ?ConcreteNode,
-  itemType: string,
-};
-
-type ConnectionDeleteEdgeUpdaterOptions = {
-  parentId: string,
-  connectionName: string,
-  nodeId: string,
-  store: Store,
-};
-
-type CopyObjScalarsToProxyOptions = {
-  object: Object,
-  proxy: RecordProxy,
-};
-
-export function listRecordRemoveUpdater({ parentId, itemId, parentFieldName, store }: ListRecordRemoveUpdaterOptions) {
+export function listRecordRemoveUpdater({
+  parentId,
+  itemId,
+  parentFieldName,
+  store
+}) {
   const parentProxy = store.get(parentId);
   const items = parentProxy.getLinkedRecords(parentFieldName);
 
-  parentProxy.setLinkedRecords(items.filter(record => record._dataID !== itemId), parentFieldName);
+  parentProxy.setLinkedRecords(
+    items.filter(record => record._dataID !== itemId),
+    parentFieldName
+  );
 }
 
-export function listRecordAddUpdater({ parentId, item, type, parentFieldName, store }: ListRecordAddUpdaterOptions) {
+export function listRecordAddUpdater({
+  parentId,
+  item,
+  type,
+  parentFieldName,
+  store
+}) {
   const node = store.create(item.id, type);
 
   Object.keys(item).forEach(key => {
@@ -60,19 +37,25 @@ export function listRecordAddUpdater({ parentId, item, type, parentFieldName, st
   parentProxy.setLinkedRecords([...items, node], parentFieldName);
 }
 
-export function connectionUpdater(
-  store: Store,
-  parentId: string,
-  connectionName: string,
-  edge: RecordProxy,
-  before?: boolean = false,
-) {
+export function connectionUpdater({
+  store,
+  parentId,
+  connectionName,
+  edge,
+  before = false
+}) {
   if (edge) {
     const parentProxy = store.get(parentId);
-    const conn = ConnectionHandler.getConnection(parentProxy, connectionName);
-    if (!conn) {
-      return;
+    if (!parentProxy) {
+      // eslint-disable-next-line
+      return console.warn(
+        `The parentId (${parentId}), is not found in store, probably this is not a global field ID`
+      );
     }
+
+    const conn = ConnectionHandler.getConnection(parentProxy, connectionName);
+    // eslint-disable-next-line
+    if (!conn) return console.warn('The connection to update was not found.');
 
     if (before) {
       ConnectionHandler.insertEdgeBefore(conn, edge);
@@ -88,16 +71,20 @@ export function optimisticConnectionUpdater({
   connectionName,
   item,
   customNode,
-  itemType,
-}: OptimisticConnectionUpdaterOptions) {
+  itemType
+}) {
   const node = customNode || store.create(item.id, itemType);
 
-  !customNode &&
+  if (customNode) {
     Object.keys(item).forEach(key => {
       node.setValue(item[key], key);
     });
+  }
 
-  const edge = store.create('client:newEdge:' + node._dataID.match(/[^:]+$/)[0], `${itemType}Edge`);
+  const edge = store.create(
+    `client:newEdge:${node._dataID.match(/[^:]+$/)[0]}`,
+    `${itemType}Edge`
+  );
   edge.setLinkedRecord(node, 'node');
 
   connectionUpdater(store, parentId, connectionName, edge);
@@ -107,8 +94,8 @@ export function connectionDeleteEdgeUpdater({
   parentId,
   connectionName,
   nodeId,
-  store,
-}: ConnectionDeleteEdgeUpdaterOptions) {
+  store
+}) {
   const parentProxy = store.get(parentId);
   const conn = ConnectionHandler.getConnection(parentProxy, connectionName);
 
@@ -121,7 +108,7 @@ export function connectionDeleteEdgeUpdater({
   ConnectionHandler.deleteNode(conn, nodeId);
 }
 
-export function copyObjScalarsToProxy({ object, proxy }: CopyObjScalarsToProxyOptions) {
+export function copyObjScalarsToProxy({ object, proxy }) {
   Object.keys(object).forEach(key => {
     if (isObject(object[key]) || isArray(object[key])) return;
     proxy.setValue(object[key], key);

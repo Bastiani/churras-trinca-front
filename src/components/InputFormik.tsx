@@ -5,6 +5,16 @@ import React, { useState } from 'react';
 
 import { Error, InputContainer } from './styles/InputFormik';
 
+interface IInputFormik {
+  name: string;
+  formik?: any;
+  type?: string;
+  checkPassword?: boolean;
+  strongerlevel?: (level: number) => void;
+  label: string;
+  placeholder?: string;
+}
+
 const InputFormik = ({
   name,
   formik,
@@ -14,10 +24,10 @@ const InputFormik = ({
   label: labelmsg,
   placeholder,
   ...props
-}) => {
+}: IInputFormik) => {
   const [passwordStronger, setPasswordStronger] = useState(0);
 
-  const handleValidatePassword = (password) => {
+  const handleValidatePassword = (password: string) => {
     const matchedCase = ['[$@$!%*#?&]', '[A-Z]', '[0-9]', '[a-z]'];
 
     let i;
@@ -56,19 +66,17 @@ const InputFormik = ({
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { value } = event.target;
 
     if (type === 'password' && checkPassword) {
       handleValidatePassword(value);
     }
 
-    formik.setFieldValue(name, value);
+    formik.setFieldValue(name, type === 'number' ? Number(value) : value);
   };
 
-  const {
-    values, errors, touched, handleBlur,
-  } = formik;
+  const { values, errors, touched, handleBlur } = formik;
   const value = get(values, name, '');
   const wasTouched = get(touched, name);
   const fieldError = wasTouched && get(errors, name, null);
@@ -84,7 +92,6 @@ const InputFormik = ({
         name={name}
         type={type || 'text'}
         placeholder={placeholder}
-        valid={!fieldError}
         {...props}
       />
       {fieldError && <Error>{fieldError}</Error>}

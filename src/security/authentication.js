@@ -1,12 +1,11 @@
-
 import { LOCAL_STORAGE } from './consts';
 
 export async function getToken() {
   return localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN);
 }
 
-export async function isLoggedIn() {
-  return !!getToken();
+export function isLoggedIn() {
+  return !!localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN);
 }
 
 export function setToken(token) {
@@ -18,5 +17,7 @@ export async function removeToken() {
 }
 
 export function logout() {
-  Object.keys(LOCAL_STORAGE).map((key) => localStorage.removeItem(LOCAL_STORAGE[key]));
+  Object.keys(LOCAL_STORAGE).map(key =>
+    localStorage.removeItem(LOCAL_STORAGE[key])
+  );
 }

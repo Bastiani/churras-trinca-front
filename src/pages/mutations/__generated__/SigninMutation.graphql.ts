@@ -1,33 +1,25 @@
-/**
- * @flow
- * @relayHash deb12850eddf67e7159ecb42fa878bf0
- */
+/* tslint:disable */
 
-/* eslint-disable */
+import { ConcreteRequest } from "relay-runtime";
+export type UserLoginWithEmailInput = {
+    readonly email: string;
+    readonly password: string;
+    readonly clientMutationId?: string | null;
+};
+export type SigninMutationVariables = {
+    readonly input: UserLoginWithEmailInput;
+};
+export type SigninMutationResponse = {
+    readonly UserLoginWithEmail: {
+        readonly error: string | null;
+        readonly token: string | null;
+    } | null;
+};
+export type SigninMutation = {
+    readonly response: SigninMutationResponse;
+    readonly variables: SigninMutationVariables;
+};
 
-'use strict';
-
-/*::
-import type { ConcreteRequest } from 'relay-runtime';
-export type UserLoginWithEmailInput = {|
-  email: string,
-  password: string,
-  clientMutationId?: ?string,
-|};
-export type SigninMutationVariables = {|
-  input: UserLoginWithEmailInput
-|};
-export type SigninMutationResponse = {|
-  +UserLoginWithEmail: ?{|
-    +error: ?string,
-    +token: ?string,
-  |}
-|};
-export type SigninMutation = {|
-  variables: SigninMutationVariables,
-  response: SigninMutationResponse,
-|};
-*/
 
 
 /*
@@ -41,7 +33,7 @@ mutation SigninMutation(
 }
 */
 
-const node/*: ConcreteRequest*/ = (function(){
+const node: ConcreteRequest = (function(){
 var v0 = [
   {
     "kind": "LocalArgument",
@@ -108,6 +100,5 @@ return {
   }
 };
 })();
-// prettier-ignore
-(node/*: any*/).hash = 'f5acc190248aac3b86ac286acc7c42f0';
-module.exports = node;
+(node as any).hash = 'f5acc190248aac3b86ac286acc7c42f0';
+export default node;

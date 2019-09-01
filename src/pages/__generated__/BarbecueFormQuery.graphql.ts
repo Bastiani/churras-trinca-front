@@ -30,25 +30,6 @@ fragment BarbecueForm_query_1Bmzm5 on Query {
     description
     observation
   }
-  participants(barbecueIdArgs: $id, first: 2147483647) {
-    edges {
-      node {
-        id
-        _id
-        participant {
-          name
-          id
-        }
-        total
-        __typename
-      }
-      cursor
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
-  }
 }
 */
 
@@ -66,32 +47,6 @@ v1 = [
     "kind": "Variable",
     "name": "id",
     "variableName": "id"
-  }
-],
-v2 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "id",
-  "args": null,
-  "storageKey": null
-},
-v3 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "_id",
-  "args": null,
-  "storageKey": null
-},
-v4 = [
-  {
-    "kind": "Variable",
-    "name": "barbecueIdArgs",
-    "variableName": "id"
-  },
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 2147483647
   }
 ];
 return {
@@ -124,8 +79,20 @@ return {
         "concreteType": "Barbecue",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/),
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "id",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "_id",
+            "args": null,
+            "storageKey": null
+          },
           {
             "kind": "ScalarField",
             "alias": null,
@@ -148,115 +115,6 @@ return {
             "storageKey": null
           }
         ]
-      },
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "name": "participants",
-        "storageKey": null,
-        "args": (v4/*: any*/),
-        "concreteType": "ParticipantConnection",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "name": "edges",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "ParticipantEdge",
-            "plural": true,
-            "selections": [
-              {
-                "kind": "LinkedField",
-                "alias": null,
-                "name": "node",
-                "storageKey": null,
-                "args": null,
-                "concreteType": "Participant",
-                "plural": false,
-                "selections": [
-                  (v2/*: any*/),
-                  (v3/*: any*/),
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "participant",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "User",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "name",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      (v2/*: any*/)
-                    ]
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "total",
-                    "args": null,
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "__typename",
-                    "args": null,
-                    "storageKey": null
-                  }
-                ]
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "cursor",
-                "args": null,
-                "storageKey": null
-              }
-            ]
-          },
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "name": "pageInfo",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "PageInfoExtended",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "endCursor",
-                "args": null,
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "hasNextPage",
-                "args": null,
-                "storageKey": null
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "kind": "LinkedHandle",
-        "alias": null,
-        "name": "participants",
-        "args": (v4/*: any*/),
-        "handle": "connection",
-        "key": "BarbecueForm_participants",
-        "filters": []
       }
     ]
   },
@@ -264,7 +122,7 @@ return {
     "operationKind": "query",
     "name": "BarbecueFormQuery",
     "id": null,
-    "text": "query BarbecueFormQuery(\n  $id: ID!\n) {\n  ...BarbecueForm_query_1Bmzm5\n}\n\nfragment BarbecueForm_query_1Bmzm5 on Query {\n  barbecue(id: $id) {\n    id\n    _id\n    date\n    description\n    observation\n  }\n  participants(barbecueIdArgs: $id, first: 2147483647) {\n    edges {\n      node {\n        id\n        _id\n        participant {\n          name\n          id\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query BarbecueFormQuery(\n  $id: ID!\n) {\n  ...BarbecueForm_query_1Bmzm5\n}\n\nfragment BarbecueForm_query_1Bmzm5 on Query {\n  barbecue(id: $id) {\n    id\n    _id\n    date\n    description\n    observation\n  }\n}\n",
     "metadata": {}
   }
 };

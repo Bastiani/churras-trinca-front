@@ -14,11 +14,11 @@ import TextAreaFormik from '../components/Input/TextAreaFormik';
 import DatePickerFormik from '../components/DatePicker/DatePickerFormik';
 import Modal from '../components/Modal';
 import ParticipantForm from './ParticipantForm';
+import ParticipantsList from '../components/ParticipantsList';
 
 import BarbecueAdd from './mutations/BarbecueAddMutation';
 import BarbecueEdit from './mutations/BarbecueEditMutation';
 import createQueryRenderer from '../relay/createQueryRenderer';
-import { BRL } from '../utils/money';
 
 const ButtonStyled = styled(Button)`
   margin-right: 5px;
@@ -30,7 +30,7 @@ const validationSchema = () =>
     description: yup.string().required('Descrição é obrigatório!')
   });
 
-const BarbecueForm = ({ match, query }: any) => {
+const BarbecueForm = ({ match, query, history }: any) => {
   const [showModal, setShowModal] = useState(false);
   const editMode = !!idx(match, _ => _.params.id);
 
@@ -52,6 +52,8 @@ const BarbecueForm = ({ match, query }: any) => {
 
           if (response && response.error) {
             console.log('Erro', 'Erro na operação');
+          } else {
+            history.push('/');
           }
         };
 
@@ -84,15 +86,7 @@ const BarbecueForm = ({ match, query }: any) => {
               name="observation"
               placeholder="Observação"
             />
-            <ul>
-              {query &&
-                query.participants &&
-                query.participants.edges.map(({ node }: any) => (
-                  <li key={node.id}>
-                    {node.participant.name} - {BRL(node.total).format(true)}
-                  </li>
-                ))}
-            </ul>
+            <ParticipantsList barbecueId={barbecueId} />
             <ButtonStyled
               type="primary"
               onClick={() =>
@@ -108,10 +102,8 @@ const BarbecueForm = ({ match, query }: any) => {
             <ButtonStyled
               type="primary"
               onClick={() =>
-                validIsLoggedIn(
-                  'error',
-                  'É necessário fazer login para salvar.'
-                ) && handleSubmit()
+                validIsLoggedIn('error', 'É necessário fazer login.') &&
+                handleSubmit()
               }
             >
               Salvar
@@ -144,19 +136,6 @@ const BarbecueFragmentContainer = createFragmentContainer(BarbecueForm, {
         date
         description
         observation
-      }
-      participants(barbecueIdArgs: $id, first: 2147483647)
-        @connection(key: "BarbecueForm_participants", filters: []) {
-        edges {
-          node {
-            id
-            _id
-            participant {
-              name
-            }
-            total
-          }
-        }
       }
     }
   `

@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, createRefetchContainer } from 'react-relay';
+import { graphql, createFragmentContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, List, Typography, Icon, Alert } from 'antd';
@@ -42,9 +42,6 @@ const Home = ({ query }: IProps): any => {
             message="Para adicionar um novo churrasco primeiro faça o login"
             type="info"
           />
-          <LinkStyled to={'/signin'}>
-            <ButtonStyled type="primary">Signin</ButtonStyled>
-          </LinkStyled>
         </AlertContainer>
       )}
       <List
@@ -73,7 +70,7 @@ const Home = ({ query }: IProps): any => {
 };
 
 // @ts-ignore
-const HomeFragmentContainer = createRefetchContainer(Home, {
+const HomeFragmentContainer = createFragmentContainer(Home, {
   query: graphql`
     fragment Home_query on Query {
       me {

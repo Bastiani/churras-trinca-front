@@ -44,7 +44,7 @@ function commit(
       connectionUpdater({
         store,
         parentId: ROOT_ID,
-        connectionName: 'BarbecueForm_participants',
+        connectionName: 'ParticipantsList_participants',
         edge: newEdge,
         before: true
       });

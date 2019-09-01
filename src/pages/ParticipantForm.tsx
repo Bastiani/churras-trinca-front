@@ -1,28 +1,42 @@
 import React from 'react';
-import { Button } from '@smooth-ui/core-sc';
+import { Button } from 'antd';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { graphql, createFragmentContainer } from 'react-relay';
 import idx from 'idx';
+import styled from 'styled-components';
 
-import InputFormik from '../components/InputFormik';
+import InputFormik from '../components/Input/InputFormik';
+import { openNotificationWithIcon } from '../components/Notification';
 import ParticipantAdd from './mutations/ParticipantAddMutation';
 // import ParticipantEdit from './mutations/ParticipantEditMutation';
 import createQueryRenderer from '../relay/createQueryRenderer';
 
 import { ParticipantForm_query as ParticipantFormQuery } from './__generated__/ParticipantForm_query.graphql';
 
+interface IProps {
+  query: ParticipantFormQuery;
+  barbecueId: string;
+  actionCancel?: (event?: any) => void;
+}
+
+const ActionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 12px;
+`;
+
+const ButtonStyled = styled(Button)`
+  margin-right: 6px;
+`;
+
 const validationSchema = () =>
   yup.object().shape({
     total: yup.string().required('Total é obrigatório!')
   });
 
-interface IProps {
-  query: ParticipantFormQuery;
-  barbecueId: string;
-}
-
-const ParticipantForm = ({ query, barbecueId }: IProps) => {
+const ParticipantForm = ({ query, barbecueId, actionCancel }: IProps) => {
   return (
     <Formik
       initialValues={{
@@ -38,12 +52,24 @@ const ParticipantForm = ({ query, barbecueId }: IProps) => {
 
           if (response && response.error) {
             console.log('Erro', 'Erro na operação');
+            openNotificationWithIcon(
+              'error',
+              'Erro na operação',
+              response.error
+            );
+          } else {
+            actionCancel && actionCancel();
           }
         };
 
         const onError = () => {
           setSubmitting(false);
           console.log('Erro', 'Erro na operação');
+          openNotificationWithIcon(
+            'error',
+            'Erro na operação',
+            'Erro na operação'
+          );
         };
 
         ParticipantAdd.commit(values, onCompleted, onError);
@@ -52,20 +78,27 @@ const ParticipantForm = ({ query, barbecueId }: IProps) => {
       }}
       render={({ handleSubmit }) => (
         <>
-          <InputFormik
-            label="Participant"
-            name="participant"
-            placeholder="Participant"
-          />
+          {!idx(query, _ => _.me.id) && (
+            <InputFormik
+              label="Participant"
+              name="participant"
+              placeholder="Participant"
+            />
+          )}
           <InputFormik
             type="number"
             label="Total"
             name="total"
             placeholder="Total"
           />
-          <Button variant="success" onClick={handleSubmit}>
-            Salvar
-          </Button>
+          <ActionContainer>
+            <ButtonStyled key="back" onClick={actionCancel}>
+              Cancelar
+            </ButtonStyled>
+            <ButtonStyled type="primary" onClick={() => handleSubmit()}>
+              Salvar
+            </ButtonStyled>
+          </ActionContainer>
         </>
       )}
     />

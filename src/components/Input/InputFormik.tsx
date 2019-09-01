@@ -1,9 +1,12 @@
-import { Input, FormFieldLabel } from '@smooth-ui/core-sc';
-import { connect } from 'formik';
-import get from 'lodash/get';
 import React, { useState } from 'react';
 
-import { Error, InputContainer } from './styles/InputFormik';
+import get from 'lodash/get';
+
+import { Input, Progress } from 'antd';
+import { connect } from 'formik';
+
+import Label from '../Label/Label';
+import { Error } from '../styles/InputFormik';
 
 interface IInputFormik {
   name: string;
@@ -12,6 +15,7 @@ interface IInputFormik {
   checkPassword?: boolean;
   strongerlevel?: (level: number) => void;
   label: string;
+  labelTop?: boolean;
   placeholder?: string;
 }
 
@@ -47,21 +51,15 @@ const InputFormik = ({
     switch (counterMatchedCase) {
       case 3:
         setPasswordStronger(50);
-        if (strongerlevel) {
-          strongerlevel(50);
-        }
+        strongerlevel && strongerlevel(50);
         break;
       case 4:
         setPasswordStronger(99.9);
-        if (strongerlevel) {
-          strongerlevel(99.9);
-        }
+        strongerlevel && strongerlevel(99.9);
         break;
       default:
         setPasswordStronger(30);
-        if (strongerlevel) {
-          strongerlevel(30);
-        }
+        strongerlevel && strongerlevel(30);
         break;
     }
   };
@@ -69,9 +67,7 @@ const InputFormik = ({
   const handleChange = (event: any) => {
     const { value } = event.target;
 
-    if (type === 'password' && checkPassword) {
-      handleValidatePassword(value);
-    }
+    if (type === 'password' && checkPassword) handleValidatePassword(value);
 
     formik.setFieldValue(name, type === 'number' ? Number(value) : value);
   };
@@ -82,10 +78,8 @@ const InputFormik = ({
   const fieldError = wasTouched && get(errors, name, null);
 
   return (
-    <InputContainer>
-      <FormFieldLabel name={name}>{labelmsg}</FormFieldLabel>
+    <Label formik={formik} name={name} labelMsg={labelmsg}>
       <Input
-        control
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -94,9 +88,18 @@ const InputFormik = ({
         placeholder={placeholder}
         {...props}
       />
+      {type === 'password' && checkPassword && (
+        <Progress
+          strokeColor={{
+            from: '#EF2832',
+            to: '#4377E8'
+          }}
+          percent={passwordStronger}
+          showInfo={false}
+        />
+      )}
       {fieldError && <Error>{fieldError}</Error>}
-      {checkPassword && passwordStronger}
-    </InputContainer>
+    </Label>
   );
 };
 

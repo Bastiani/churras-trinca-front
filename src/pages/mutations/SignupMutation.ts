@@ -3,10 +3,10 @@ import { commitMutation, graphql } from 'react-relay';
 import environment from '../../relay/createRelayEnvironment';
 
 const mutation = graphql`
-  mutation SigninMutation($input: UserLoginWithEmailInput!) {
-    UserLoginWithEmail(input: $input) {
-      error
+  mutation SignupMutation($input: UserRegisterWithEmailInput!) {
+    UserRegisterWithEmail(input: $input) {
       token
+      error
     }
   }
 `;

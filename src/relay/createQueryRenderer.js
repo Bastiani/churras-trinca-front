@@ -2,7 +2,7 @@ import * as React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import { QueryRenderer } from 'react-relay';
 
-import initEnvironment from './createRelayEnvironment';
+import environment from './createRelayEnvironment';
 
 export default function createQueryRenderer(
   FragmentComponent,
@@ -16,7 +16,7 @@ export default function createQueryRenderer(
 
     return (
       <QueryRenderer
-        environment={initEnvironment()}
+        environment={environment}
         query={query}
         variables={variables || {}}
         render={({ error, props: renderProps }) => {

@@ -1,6 +1,6 @@
 import { commitMutation, graphql } from 'react-relay';
 
-import Environment from '../../relay/createRelayEnvironment';
+import environment from '../../relay/createRelayEnvironment';
 import { connectionUpdater, ROOT_ID } from '../../relay/mutationUtils';
 
 const mutation = graphql`
@@ -23,8 +23,6 @@ const mutation = graphql`
     }
   }
 `;
-
-const environment = Environment();
 
 function commit(
   input: object,

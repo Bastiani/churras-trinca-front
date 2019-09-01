@@ -1,6 +1,6 @@
 import { commitMutation, graphql } from 'react-relay';
 
-import Environment from '../../relay/createRelayEnvironment';
+import environment from '../../relay/createRelayEnvironment';
 
 const mutation = graphql`
   mutation BarbecueEditMutation($input: BarbecueEditInput!) {
@@ -17,8 +17,6 @@ const mutation = graphql`
     }
   }
 `;
-
-const environment = Environment();
 
 function commit(
   input: object,

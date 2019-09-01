@@ -19,6 +19,12 @@ query HomeQuery {
 }
 
 fragment Home_query on Query {
+  me {
+    id
+    _id
+    name
+    email
+  }
   barbecues(first: 2147483647) {
     edges {
       node {
@@ -53,21 +59,35 @@ fragment Home_query on Query {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 2147483647
-  }
-],
-v1 = {
+var v0 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
 },
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "_id",
+  "args": null,
+  "storageKey": null
+},
 v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "name",
+  "args": null,
+  "storageKey": null
+},
+v3 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 2147483647
+  }
+],
+v4 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "total",
@@ -98,9 +118,30 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "me",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "User",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          (v1/*: any*/),
+          (v2/*: any*/),
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "email",
+            "args": null,
+            "storageKey": null
+          }
+        ]
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
         "name": "barbecues",
         "storageKey": "barbecues(first:2147483647)",
-        "args": (v0/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": "BarbecueConnection",
         "plural": false,
         "selections": [
@@ -122,14 +163,8 @@ return {
                 "concreteType": "Barbecue",
                 "plural": false,
                 "selections": [
+                  (v0/*: any*/),
                   (v1/*: any*/),
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "_id",
-                    "args": null,
-                    "storageKey": null
-                  },
                   {
                     "kind": "ScalarField",
                     "alias": null,
@@ -187,25 +222,19 @@ return {
                                 "concreteType": "User",
                                 "plural": false,
                                 "selections": [
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "name": "name",
-                                    "args": null,
-                                    "storageKey": null
-                                  },
-                                  (v1/*: any*/)
+                                  (v2/*: any*/),
+                                  (v0/*: any*/)
                                 ]
                               },
-                              (v2/*: any*/),
-                              (v1/*: any*/)
+                              (v4/*: any*/),
+                              (v0/*: any*/)
                             ]
                           }
                         ]
                       }
                     ]
                   },
-                  (v2/*: any*/),
+                  (v4/*: any*/),
                   {
                     "kind": "ScalarField",
                     "alias": null,
@@ -255,7 +284,7 @@ return {
         "kind": "LinkedHandle",
         "alias": null,
         "name": "barbecues",
-        "args": (v0/*: any*/),
+        "args": (v3/*: any*/),
         "handle": "connection",
         "key": "Home_barbecues",
         "filters": []
@@ -266,7 +295,7 @@ return {
     "operationKind": "query",
     "name": "HomeQuery",
     "id": null,
-    "text": "query HomeQuery {\n  ...Home_query\n}\n\nfragment Home_query on Query {\n  barbecues(first: 2147483647) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query HomeQuery {\n  ...Home_query\n}\n\nfragment Home_query on Query {\n  me {\n    id\n    _id\n    name\n    email\n  }\n  barbecues(first: 2147483647) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

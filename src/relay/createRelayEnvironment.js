@@ -1,13 +1,12 @@
-import {
-  Environment, Network, RecordSource, Store,
-} from 'relay-runtime';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import RelayNetworkLogger from 'relay-runtime/lib/RelayNetworkLogger';
+import { installRelayDevTools } from 'relay-devtools';
 
 import { getToken } from '../security/authentication';
 
 async function fetchQuery(
   operation,
-  variables,
+  variables
   // cacheConfig,
   // uploadables
 ) {
@@ -18,23 +17,24 @@ async function fetchQuery(
     headers: {
       Accept: 'application/json',
       Authorization: token || '',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }, // Add authentication and other headers here
     body: JSON.stringify({
       query: operation.text, // GraphQL text from input
-      variables,
-    }),
-  }).then((response) => response.json());
+      variables
+    })
+  }).then(response => response.json());
 }
 
-export default function initEnvironment({ records = {} } = {}) {
-  const network = Network.create(
-    RelayNetworkLogger.wrapFetch(fetchQuery, () => '')
-  );
-  const store = new Store(new RecordSource(records));
+const network = Network.create(
+  RelayNetworkLogger.wrapFetch(fetchQuery, () => '')
+);
 
-  return new Environment({
-    network,
-    store,
-  });
-}
+const store = new Store(new RecordSource());
+installRelayDevTools();
+const env = new Environment({
+  network,
+  store
+});
+
+export default env;

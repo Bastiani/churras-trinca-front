@@ -1,26 +1,20 @@
 import React from 'react';
-import Modal from 'react-modal';
+import { Modal } from 'antd';
+import { ModalProps } from 'antd/lib/modal';
 
-interface IProps {
+interface IProps extends ModalProps {
   children: React.ReactNode;
-  showDialog: boolean;
-  setShowDialog: (param: boolean) => void;
+  showModal: boolean;
 }
 
-Modal.setAppElement('#root');
-
-const ModalForm = ({ children, showDialog, setShowDialog }: IProps) => {
+const ModalComponent = ({ children, showModal, ...props }: IProps) => {
   return (
-    <Modal
-      isOpen={showDialog}
-      // onAfterOpen={this.afterOpenModal}
-      onRequestClose={() => setShowDialog(false)}
-      // style={customStyles}
-      contentLabel="Example Modal"
-    >
-      {children}
-    </Modal>
+    <div>
+      <Modal visible={showModal} {...props}>
+        {children}
+      </Modal>
+    </div>
   );
 };
 
-export default ModalForm;
+export default ModalComponent;

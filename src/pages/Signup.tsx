@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import styled from 'styled-components';
 
 import InputFormik from '../components/Input/InputFormik';
-import SigninMutation from './mutations/SigninMutation';
+import SignupMutation from './mutations/SignupMutation';
 
 import { setToken } from '../security/authentication';
 import { openNotificationWithIcon } from '../components/Notification';
@@ -31,27 +31,41 @@ const ButtonStyled = styled(Button)`
 
 const validationSchema = () =>
   yup.object().shape({
+    name: yup.string().required('Nome é obrigatório!'),
     email: yup
       .string()
-      .email('Invalid email!')
-      .required('Email required!'),
-    password: yup.string().required('Password is required!')
+      .email('Email inválido!')
+      .required('Email é obrigatório!'),
+    password: yup
+      .string()
+      .required('Senha é obrigatório!')
+      .test('passwordStronger', 'Senha não é forte', function valid() {
+        const { passwordStronger } = this.parent;
+        return passwordStronger >= 31;
+      }),
+    passwordRepeat: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Senha não confere')
+      .required('Senha não confere')
   });
 
 const Signin = ({ history }: any) => (
   <Formik
     initialValues={{
+      name: '',
       email: '',
-      password: ''
+      password: '',
+      passwordRepeat: '',
+      passwordStronger: 0
     }}
     validationSchema={validationSchema()}
     onSubmit={(values, { setSubmitting }) => {
       const onCompleted = (res: any) => {
         setSubmitting(false);
-        const response = res && res.UserLoginWithEmail;
+        const response = res && res.UserRegisterWithEmail;
 
         if (response && response.error) {
-          console.log('Erro', 'Erro ao tentar fazer login');
+          console.log('Erro', 'Erro ao tentar cadastrar');
           openNotificationWithIcon('error', 'Erro na operação', response.error);
         } else if (response.token) {
           setToken(response.token);
@@ -61,29 +75,49 @@ const Signin = ({ history }: any) => (
 
       const onError = () => {
         setSubmitting(false);
-        console.log('Erro', 'Erro ao tentar fazer login');
+        console.log('Erro', 'Erro ao tentar cadastrar');
         openNotificationWithIcon(
           'error',
           'Erro na operação',
-          'Erro ao tentar fazer login'
+          'Erro ao tentar cadastrar'
         );
       };
-
-      SigninMutation.commit(values, onCompleted, onError);
+      const {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        passwordRepeat,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        passwordStronger,
+        ...newValues
+      } = values;
+      SignupMutation.commit({ ...newValues }, onCompleted, onError);
       setSubmitting(false);
     }}
-    render={({ handleSubmit }) => (
+    render={({ handleSubmit, setFieldValue }) => (
       <Container>
         <CardStyled>
+          <input type="hidden" name="passwordStronger" />
+
+          <InputFormik label="Name" name="name" placeholder="Name" />
           <InputFormik label="Email" name="email" placeholder="Email" />
           <InputFormik
-            type="password"
             label="Senha"
             name="password"
             placeholder="Senha"
+            type="password"
+            checkPassword
+            strongerlevel={stronger =>
+              setFieldValue('passwordStronger', stronger)
+            }
+          />
+
+          <InputFormik
+            label="Repetir Senha"
+            name="passwordRepeat"
+            placeholder="Repetir senha"
+            type="password"
           />
           <ButtonStyled type="primary" onClick={() => handleSubmit()}>
-            Entrar
+            Criar conta
           </ButtonStyled>
         </CardStyled>
       </Container>

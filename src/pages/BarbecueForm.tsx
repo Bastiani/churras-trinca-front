@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import { Button } from '@smooth-ui/core-sc';
+import { Button } from 'antd';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { withRouter } from 'react-router-dom';
 import { graphql, createFragmentContainer } from 'react-relay';
 import idx from 'idx';
+import styled from 'styled-components';
 
-import { isLoggedIn } from '../security/authentication';
+import { validIsLoggedIn } from '../utils/validIsLoggedIn';
 
-import InputFormik from '../components/InputFormik';
-import TextAreaFormik from '../components/TextAreaFormik';
-import DatePickerFormik from '../components/DatePickerFormik';
+import InputFormik from '../components/Input/InputFormik';
+import TextAreaFormik from '../components/Input/TextAreaFormik';
+import DatePickerFormik from '../components/DatePicker/DatePickerFormik';
 import Modal from '../components/Modal';
 import ParticipantForm from './ParticipantForm';
 
 import BarbecueAdd from './mutations/BarbecueAddMutation';
 import BarbecueEdit from './mutations/BarbecueEditMutation';
 import createQueryRenderer from '../relay/createQueryRenderer';
+import { BRL } from '../utils/money';
+
+const ButtonStyled = styled(Button)`
+  margin-right: 5px;
+`;
 
 const validationSchema = () =>
   yup.object().shape({
@@ -24,17 +30,14 @@ const validationSchema = () =>
     description: yup.string().required('Descrição é obrigatório!')
   });
 
-const validIsLoggedIn = () =>
-  !isLoggedIn() ? alert('Para participar do churras faça o login') : true;
-
-const Barbecue = ({ match, query }: any) => {
-  const [showDialog, setShowDialog] = useState(false);
+const BarbecueForm = ({ match, query }: any) => {
+  const [showModal, setShowModal] = useState(false);
   const editMode = !!idx(match, _ => _.params.id);
 
   return (
     <Formik
       initialValues={{
-        date: idx(query, _ => _.barbecue.date) || '',
+        date: idx(query, _ => _.barbecue.date) || new Date(),
         description: idx(query, _ => _.barbecue.description) || '',
         observation: idx(query, _ => _.barbecue.observation) || ''
       }}
@@ -70,7 +73,7 @@ const Barbecue = ({ match, query }: any) => {
         const barbecueId = idx(query, _ => _.barbecue.id) || '';
         return (
           <>
-            {/* <DatePickerFormik label="Data" name="date" /> */}
+            <DatePickerFormik label="Data" name="date" />
             <InputFormik
               label="Descrição"
               name="description"
@@ -86,21 +89,43 @@ const Barbecue = ({ match, query }: any) => {
                 query.participants &&
                 query.participants.edges.map(({ node }: any) => (
                   <li key={node.id}>
-                    {node.participant.name} - {node.total}
+                    {node.participant.name} - {BRL(node.total).format(true)}
                   </li>
                 ))}
             </ul>
-            <Button
-              variant="success"
-              onClick={() => validIsLoggedIn() && setShowDialog(true)}
+            <ButtonStyled
+              type="primary"
+              onClick={() =>
+                validIsLoggedIn(
+                  'error',
+                  'É necessário fazer login para participar.'
+                ) && setShowModal(true)
+              }
+              disabled={!editMode}
             >
               Participar
-            </Button>
-            <Button variant="success" onClick={handleSubmit}>
+            </ButtonStyled>
+            <ButtonStyled
+              type="primary"
+              onClick={() =>
+                validIsLoggedIn(
+                  'error',
+                  'É necessário fazer login para salvar.'
+                ) && handleSubmit()
+              }
+            >
               Salvar
-            </Button>
-            <Modal showDialog={showDialog} setShowDialog={setShowDialog}>
-              <ParticipantForm barbecueId={barbecueId} />
+            </ButtonStyled>
+            <Modal
+              title="Adicionar participante"
+              showModal={showModal}
+              footer={null}
+            >
+              <ParticipantForm
+                barbecueId={barbecueId}
+                setShowModal={setShowModal}
+                actionCancel={() => setShowModal(false)}
+              />
             </Modal>
           </>
         );
@@ -109,7 +134,7 @@ const Barbecue = ({ match, query }: any) => {
   );
 };
 
-const BarbecueFragmentContainer = createFragmentContainer(Barbecue, {
+const BarbecueFragmentContainer = createFragmentContainer(BarbecueForm, {
   query: graphql`
     fragment BarbecueForm_query on Query
       @argumentDefinitions(id: { type: "ID!" }) {
@@ -119,20 +144,6 @@ const BarbecueFragmentContainer = createFragmentContainer(Barbecue, {
         date
         description
         observation
-        # participants(
-        #   first: 2147483647 # max GraphQLInt
-        # ) @connection(key: "BarbecueForm_participants", filters: []) {
-        #   edges {
-        #     node {
-        #       id
-        #       _id
-        #       participant {
-        #         name
-        #       }
-        #       total
-        #     }
-        #   }
-        # }
       }
       participants(barbecueIdArgs: $id, first: 2147483647)
         @connection(key: "BarbecueForm_participants", filters: []) {
@@ -153,7 +164,7 @@ const BarbecueFragmentContainer = createFragmentContainer(Barbecue, {
 
 export default createQueryRenderer(
   BarbecueFragmentContainer,
-  withRouter(Barbecue),
+  withRouter(BarbecueForm),
   {
     query: graphql`
       query BarbecueFormQuery($id: ID!) {

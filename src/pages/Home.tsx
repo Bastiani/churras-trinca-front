@@ -2,7 +2,8 @@ import React from 'react';
 import { graphql, createPaginationContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, List, Typography, Icon, Alert } from 'antd';
+import { Button, List, Card, Typography, Icon, Alert } from 'antd';
+import idx from 'idx';
 
 import createQueryRenderer from '../relay/createQueryRenderer';
 import { formatDate } from '../utils/formatDate';
@@ -58,28 +59,35 @@ const Home = ({ query, relay }: IProps): any => {
         </AlertContainer>
       )}
       <List
-        header={<div>Lista de churrascos agendados</div>}
+        grid={{
+          gutter: 16,
+          xs: 1,
+          sm: 2,
+          md: 4,
+          lg: 4,
+          xl: 6,
+          xxl: 3
+        }}
         // @ts-ignore
         dataSource={query.barbecues.edges || []}
         renderItem={({ node }: any) => (
           <List.Item>
             <LinkStyled key={node.id} to={`/barbecue/${node.id}`}>
-              <b>
-                <Typography.Text>{formatDate(node.date)}</Typography.Text>
-              </b>
-              <p>
-                <Typography.Text>{node.description}</Typography.Text>
-              </p>
-              <Icon type="team" />
-              {node.participants.edges.length}
-              <p>{BRL(node.total).format(true)}</p>
+              <Card title={formatDate(node.date)}>
+                <p>
+                  <Typography.Text>{node.description}</Typography.Text>
+                </p>
+                <Icon type="team" />
+                {node.participants.edges.length}
+                <p>{BRL(node.total).format(true)}</p>
+              </Card>
             </LinkStyled>
           </List.Item>
         )}
       />
-      <ButtonStyled type="primary" onClick={loadMore}>
-        Carregar mais
-      </ButtonStyled>
+      {query.barbecues && query.barbecues.edges.length >= 1 && (
+        <ButtonStyled onClick={loadMore}>Carregar mais</ButtonStyled>
+      )}
     </div>
   );
 };
@@ -93,6 +101,11 @@ const HomePaginationContainer = createPaginationContainer(
           count: { type: "Int" }
           cursor: { type: "String" }
         ) {
+        me {
+          id
+          _id
+          name
+        }
         barbecues(first: $count, after: $cursor)
           @connection(key: "Home_barbecues", filters: []) {
           edges {

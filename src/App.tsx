@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Icon, PageHeader, Dropdown } from 'antd';
+import { Layout, Menu, Button, PageHeader, Dropdown } from 'antd';
 import { graphql, createRefetchContainer } from 'react-relay';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
@@ -68,7 +68,7 @@ const App = ({ children, history, location, query, relay }: IProps) => {
           <Dropdown key="1" overlay={menu(history, relay)} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               {query && query.me && `${query.me.name} - `}
-              <Icon type="user" />
+              <Button shape="circle" icon="user" />
             </a>
           </Dropdown>
         ]}

@@ -25,6 +25,11 @@ query HomePaginationQuery(
 }
 
 fragment Home_query_1G22uz on Query {
+  me {
+    id
+    _id
+    name
+  }
   barbecues(first: $count, after: $cursor) {
     edges {
       node {
@@ -73,7 +78,28 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = [
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "_id",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "name",
+  "args": null,
+  "storageKey": null
+},
+v4 = [
   {
     "kind": "Variable",
     "name": "after",
@@ -85,14 +111,7 @@ v1 = [
     "variableName": "count"
   }
 ],
-v2 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "id",
-  "args": null,
-  "storageKey": null
-},
-v3 = {
+v5 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "total",
@@ -134,9 +153,23 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "me",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "User",
+        "plural": false,
+        "selections": [
+          (v1/*: any*/),
+          (v2/*: any*/),
+          (v3/*: any*/)
+        ]
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
         "name": "barbecues",
         "storageKey": null,
-        "args": (v1/*: any*/),
+        "args": (v4/*: any*/),
         "concreteType": "BarbecueConnection",
         "plural": false,
         "selections": [
@@ -158,14 +191,8 @@ return {
                 "concreteType": "Barbecue",
                 "plural": false,
                 "selections": [
+                  (v1/*: any*/),
                   (v2/*: any*/),
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "_id",
-                    "args": null,
-                    "storageKey": null
-                  },
                   {
                     "kind": "ScalarField",
                     "alias": null,
@@ -223,25 +250,19 @@ return {
                                 "concreteType": "User",
                                 "plural": false,
                                 "selections": [
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "name": "name",
-                                    "args": null,
-                                    "storageKey": null
-                                  },
-                                  (v2/*: any*/)
+                                  (v3/*: any*/),
+                                  (v1/*: any*/)
                                 ]
                               },
-                              (v3/*: any*/),
-                              (v2/*: any*/)
+                              (v5/*: any*/),
+                              (v1/*: any*/)
                             ]
                           }
                         ]
                       }
                     ]
                   },
-                  (v3/*: any*/),
+                  (v5/*: any*/),
                   {
                     "kind": "ScalarField",
                     "alias": null,
@@ -291,7 +312,7 @@ return {
         "kind": "LinkedHandle",
         "alias": null,
         "name": "barbecues",
-        "args": (v1/*: any*/),
+        "args": (v4/*: any*/),
         "handle": "connection",
         "key": "Home_barbecues",
         "filters": []
@@ -302,7 +323,7 @@ return {
     "operationKind": "query",
     "name": "HomePaginationQuery",
     "id": null,
-    "text": "query HomePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...Home_query_1G22uz\n}\n\nfragment Home_query_1G22uz on Query {\n  barbecues(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query HomePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...Home_query_1G22uz\n}\n\nfragment Home_query_1G22uz on Query {\n  me {\n    id\n    _id\n    name\n  }\n  barbecues(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

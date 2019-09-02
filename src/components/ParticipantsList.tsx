@@ -1,12 +1,27 @@
 import React from 'react';
 import { graphql, createRefetchContainer } from 'react-relay';
 import { Button, Popconfirm } from 'antd';
+import styled from 'styled-components';
 
 import createQueryRenderer from '../relay/createQueryRenderer';
 import { BRL } from '../utils/money';
 
 import ParticipantEdit from '../pages/mutations/ParticipantEditMutation';
 import { ParticipantsList_query as ParticipantsListQuery } from './__generated__/ParticipantsList_query.graphql';
+import { isLoggedIn } from '../security/authentication';
+
+const UlStyled = styled.ul`
+  list-style-type: none;
+  padding-left: 0px;
+`;
+
+const ButtonStyled = styled(Button)`
+  margin-right: 10px;
+`;
+
+const LiStyled = styled.li`
+  margin-bottom: 10px;
+`;
 
 interface IProps {
   barbecueId: string;
@@ -50,23 +65,25 @@ const ParticipantsList = (props: IProps) => {
     ParticipantEdit.commit({ id, active: false }, onCompleted, onError);
 
   return (
-    <ul>
+    <UlStyled>
       {query &&
         query.participants &&
         query.participants.edges.map(({ node }: any) => (
-          <li key={node.id}>
-            <Popconfirm
-              title="Quer mesmo remover?"
-              onConfirm={() => handleDeleteClick(node.id)}
-              okText="Sim"
-              cancelText="Não"
-            >
-              <Button type="primary" shape="circle" icon="delete" />
-            </Popconfirm>{' '}
-            - {node.participant.name} - {BRL(node.total).format(true)}
-          </li>
+          <LiStyled key={node.id}>
+            {isLoggedIn() && (
+              <Popconfirm
+                title="Quer mesmo remover?"
+                onConfirm={() => handleDeleteClick(node.id)}
+                okText="Sim"
+                cancelText="Não"
+              >
+                <ButtonStyled type="primary" shape="circle" icon="delete" />
+              </Popconfirm>
+            )}
+            {node.participant.name} - {BRL(node.total).format(true)}
+          </LiStyled>
         ))}
-    </ul>
+    </UlStyled>
   );
 };
 

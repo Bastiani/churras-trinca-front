@@ -2,22 +2,22 @@
 
 import { ConcreteRequest } from "relay-runtime";
 type Home_query$ref = any;
-export type HomeQueryVariables = {
+export type HomePaginationQueryVariables = {
     readonly count: number;
     readonly cursor?: string | null;
 };
-export type HomeQueryResponse = {
+export type HomePaginationQueryResponse = {
     readonly " $fragmentRefs": Home_query$ref;
 };
-export type HomeQuery = {
-    readonly response: HomeQueryResponse;
-    readonly variables: HomeQueryVariables;
+export type HomePaginationQuery = {
+    readonly response: HomePaginationQueryResponse;
+    readonly variables: HomePaginationQueryVariables;
 };
 
 
 
 /*
-query HomeQuery(
+query HomePaginationQuery(
   $count: Int!
   $cursor: String
 ) {
@@ -103,7 +103,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "HomeQuery",
+    "name": "HomePaginationQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -128,7 +128,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "HomeQuery",
+    "name": "HomePaginationQuery",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
@@ -300,12 +300,12 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "HomeQuery",
+    "name": "HomePaginationQuery",
     "id": null,
-    "text": "query HomeQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...Home_query_1G22uz\n}\n\nfragment Home_query_1G22uz on Query {\n  barbecues(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query HomePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...Home_query_1G22uz\n}\n\nfragment Home_query_1G22uz on Query {\n  barbecues(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        _id\n        date\n        description\n        observation\n        participants {\n          edges {\n            node {\n              participant {\n                name\n                id\n              }\n              total\n              id\n            }\n          }\n        }\n        total\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '02ccb0897e42cf74294d6ffee6050284';
+(node as any).hash = '34c991e09675d7aec490bfcdb166627d';
 export default node;

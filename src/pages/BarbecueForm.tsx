@@ -75,6 +75,9 @@ const BarbecueForm = ({ match, query, history }: any) => {
         const barbecueId = idx(query, _ => _.barbecue.id) || '';
         return (
           <>
+            {editMode && (
+              <span>Agendado por {idx(query, _ => _.barbecue.user.name)}</span>
+            )}
             <DatePickerFormik label="Data" name="date" />
             <InputFormik
               label="Descrição"
@@ -112,6 +115,7 @@ const BarbecueForm = ({ match, query, history }: any) => {
               title="Adicionar participante"
               showModal={showModal}
               footer={null}
+              closable={false}
             >
               <ParticipantForm
                 barbecueId={barbecueId}
@@ -136,6 +140,11 @@ const BarbecueFragmentContainer = createFragmentContainer(BarbecueForm, {
         date
         description
         observation
+        user {
+          id
+          _id
+          name
+        }
       }
     }
   `

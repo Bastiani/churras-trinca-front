@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, createFragmentContainer } from 'react-relay';
+import { graphql, createPaginationContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, List, Typography, Icon, Alert } from 'antd';
@@ -27,9 +27,22 @@ const AlertContainer = styled.div`
 
 interface IProps {
   query: HomeQuery;
+  relay: any;
 }
 
-const Home = ({ query }: IProps): any => {
+const LOAD_MORE = 4;
+
+const Home = ({ query, relay }: IProps): any => {
+  const loadMore = () => {
+    if (!relay.hasMore() || relay.isLoading()) {
+      return;
+    }
+
+    relay.loadMore(LOAD_MORE, (error: any) => {
+      console.log(error);
+    });
+  };
+
   return (
     <div>
       {validIsLoggedIn() ? (
@@ -46,7 +59,6 @@ const Home = ({ query }: IProps): any => {
       )}
       <List
         header={<div>Lista de churrascos agendados</div>}
-        bordered
         // @ts-ignore
         dataSource={query.barbecues.edges || []}
         renderItem={({ node }: any) => (
@@ -65,52 +77,80 @@ const Home = ({ query }: IProps): any => {
           </List.Item>
         )}
       />
+      <ButtonStyled type="primary" onClick={loadMore}>
+        Carregar mais
+      </ButtonStyled>
     </div>
   );
 };
 
-// @ts-ignore
-const HomeFragmentContainer = createFragmentContainer(Home, {
-  query: graphql`
-    fragment Home_query on Query {
-      me {
-        id
-        _id
-        name
-        email
-      }
-      barbecues(
-        first: 2147483647 # max GraphQLInt
-      ) @connection(key: "Home_barbecues", filters: []) {
-        edges {
-          node {
-            id
-            _id
-            date
-            description
-            observation
-            participants {
-              edges {
-                node {
-                  participant {
-                    name
+const HomePaginationContainer = createPaginationContainer(
+  Home,
+  {
+    query: graphql`
+      fragment Home_query on Query
+        @argumentDefinitions(
+          count: { type: "Int" }
+          cursor: { type: "String" }
+        ) {
+        barbecues(first: $count, after: $cursor)
+          @connection(key: "Home_barbecues", filters: []) {
+          edges {
+            node {
+              id
+              _id
+              date
+              description
+              observation
+              participants {
+                edges {
+                  node {
+                    participant {
+                      name
+                    }
+                    total
                   }
-                  total
                 }
               }
+              total
             }
-            total
           }
         }
       }
-    }
-  `
-});
+    `
+  },
+  {
+    direction: 'forward',
+    getConnectionFromProps(props) {
+      return props.query && props.query.barbecues;
+    },
+    getFragmentVariables(prevVars, totalCount) {
+      return {
+        ...prevVars,
+        count: totalCount
+      };
+    },
+    getVariables(props, { count, cursor }) {
+      return {
+        count,
+        cursor
+      };
+    },
+    query: graphql`
+      query HomePaginationQuery($count: Int!, $cursor: String) {
+        ...Home_query @arguments(count: $count, cursor: $cursor)
+      }
+    `
+  }
+);
 
-export default createQueryRenderer(HomeFragmentContainer, Home, {
+export default createQueryRenderer(HomePaginationContainer, Home, {
   query: graphql`
-    query HomeQuery {
-      ...Home_query
+    query HomeQuery($count: Int!, $cursor: String) {
+      ...Home_query @arguments(count: $count, cursor: $cursor)
     }
-  `
+  `,
+  variables: {
+    count: LOAD_MORE
+  }
 });

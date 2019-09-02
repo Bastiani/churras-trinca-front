@@ -17,6 +17,9 @@ type Barbecue implements Node {
   # Total
   total: Float
 
+  # User that created this
+  user: User
+
   # Active of the barbecue
   active: Boolean
 }

@@ -29,6 +29,11 @@ fragment BarbecueForm_query_1Bmzm5 on Query {
     date
     description
     observation
+    user {
+      id
+      _id
+      name
+    }
   }
 }
 */
@@ -48,7 +53,21 @@ v1 = [
     "name": "id",
     "variableName": "id"
   }
-];
+],
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "_id",
+  "args": null,
+  "storageKey": null
+};
 return {
   "kind": "Request",
   "fragment": {
@@ -79,20 +98,8 @@ return {
         "concreteType": "Barbecue",
         "plural": false,
         "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "id",
-            "args": null,
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "_id",
-            "args": null,
-            "storageKey": null
-          },
+          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "kind": "ScalarField",
             "alias": null,
@@ -113,6 +120,26 @@ return {
             "name": "observation",
             "args": null,
             "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "user",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "User",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              (v3/*: any*/),
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "name",
+                "args": null,
+                "storageKey": null
+              }
+            ]
           }
         ]
       }
@@ -122,7 +149,7 @@ return {
     "operationKind": "query",
     "name": "BarbecueFormQuery",
     "id": null,
-    "text": "query BarbecueFormQuery(\n  $id: ID!\n) {\n  ...BarbecueForm_query_1Bmzm5\n}\n\nfragment BarbecueForm_query_1Bmzm5 on Query {\n  barbecue(id: $id) {\n    id\n    _id\n    date\n    description\n    observation\n  }\n}\n",
+    "text": "query BarbecueFormQuery(\n  $id: ID!\n) {\n  ...BarbecueForm_query_1Bmzm5\n}\n\nfragment BarbecueForm_query_1Bmzm5 on Query {\n  barbecue(id: $id) {\n    id\n    _id\n    date\n    description\n    observation\n    user {\n      id\n      _id\n      name\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

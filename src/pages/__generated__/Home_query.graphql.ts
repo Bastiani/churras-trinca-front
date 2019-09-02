@@ -3,12 +3,6 @@
 import { ReaderFragment } from "relay-runtime";
 export type Home_query$ref = any;
 export type Home_query = {
-    readonly me: {
-        readonly id: string;
-        readonly _id: string | null;
-        readonly name: string | null;
-        readonly email: string | null;
-    } | null;
     readonly barbecues: {
         readonly edges: ReadonlyArray<{
             readonly node: {
@@ -40,27 +34,6 @@ const node: ReaderFragment = (function(){
 var v0 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "id",
-  "args": null,
-  "storageKey": null
-},
-v1 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "_id",
-  "args": null,
-  "storageKey": null
-},
-v2 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "name",
-  "args": null,
-  "storageKey": null
-},
-v3 = {
-  "kind": "ScalarField",
-  "alias": null,
   "name": "total",
   "args": null,
   "storageKey": null
@@ -72,8 +45,8 @@ return {
   "metadata": {
     "connection": [
       {
-        "count": null,
-        "cursor": null,
+        "count": "count",
+        "cursor": "cursor",
         "direction": "forward",
         "path": [
           "barbecues"
@@ -81,29 +54,21 @@ return {
       }
     ]
   },
-  "argumentDefinitions": [],
-  "selections": [
+  "argumentDefinitions": [
     {
-      "kind": "LinkedField",
-      "alias": null,
-      "name": "me",
-      "storageKey": null,
-      "args": null,
-      "concreteType": "User",
-      "plural": false,
-      "selections": [
-        (v0/*: any*/),
-        (v1/*: any*/),
-        (v2/*: any*/),
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "email",
-          "args": null,
-          "storageKey": null
-        }
-      ]
+      "kind": "LocalArgument",
+      "name": "count",
+      "type": "Int",
+      "defaultValue": 4
     },
+    {
+      "kind": "LocalArgument",
+      "name": "cursor",
+      "type": "String",
+      "defaultValue": null
+    }
+  ],
+  "selections": [
     {
       "kind": "LinkedField",
       "alias": "barbecues",
@@ -131,8 +96,20 @@ return {
               "concreteType": "Barbecue",
               "plural": false,
               "selections": [
-                (v0/*: any*/),
-                (v1/*: any*/),
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "id",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "_id",
+                  "args": null,
+                  "storageKey": null
+                },
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -190,17 +167,23 @@ return {
                               "concreteType": "User",
                               "plural": false,
                               "selections": [
-                                (v2/*: any*/)
+                                {
+                                  "kind": "ScalarField",
+                                  "alias": null,
+                                  "name": "name",
+                                  "args": null,
+                                  "storageKey": null
+                                }
                               ]
                             },
-                            (v3/*: any*/)
+                            (v0/*: any*/)
                           ]
                         }
                       ]
                     }
                   ]
                 },
-                (v3/*: any*/),
+                (v0/*: any*/),
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -249,5 +232,5 @@ return {
   ]
 };
 })();
-(node as any).hash = '81347c3de80549546cb0fcf0b82d9d51';
+(node as any).hash = 'a79ab0255457331a1cdb73eb00d71763';
 export default node;

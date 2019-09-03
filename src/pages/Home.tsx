@@ -69,7 +69,7 @@ const Home = ({ query, relay }: IProps): any => {
           xxl: 3
         }}
         // @ts-ignore
-        dataSource={query.barbecues.edges || []}
+        dataSource={idx(query, _ => _.barbecues.edges) || []}
         renderItem={({ node }: any) => (
           <List.Item>
             <LinkStyled key={node.id} to={`/barbecue/${node.id}`}>

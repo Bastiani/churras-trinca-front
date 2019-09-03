@@ -53,7 +53,7 @@ const Signin = ({ history }: any) => (
         if (response && response.error) {
           console.log('Erro', 'Erro ao tentar fazer login');
           openNotificationWithIcon('error', 'Erro na operação', response.error);
-        } else if (response.token) {
+        } else if (response && response.token) {
           setToken(response.token);
           history.push('/');
         }

@@ -13,12 +13,13 @@ interface IProps {
 
 const Label = ({ children, labelMsg, labelTop = true, name, formik }: IProps) =>
   labelTop ? (
-    <label htmlFor={name}>
-      {labelMsg}
-      {children}
-    </label>
+    <ContentStyled isRequired={formik && isRequiredField(formik, name)}>
+      <label htmlFor={name}>
+        {labelMsg}
+        {children}
+      </label>
+    </ContentStyled>
   ) : (
-    // @ts-ignore
     <ContentStyled isRequired={formik && isRequiredField(formik, name)}>
       <LabelStyled label={labelMsg}>{children}</LabelStyled>
     </ContentStyled>

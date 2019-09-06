@@ -3,6 +3,10 @@ import { Form } from 'antd';
 
 const { Item } = Form;
 
+interface IProps {
+  isRequired: boolean;
+}
+
 export const LabelStyled = styled(Item)`
   && {
     .ant-form-item-label {
@@ -15,7 +19,7 @@ export const LabelStyled = styled(Item)`
 `;
 
 export const ContentStyled = styled.div`
-  ${props =>
+  ${(props: IProps) =>
     // @ts-ignore
     props.isRequired &&
     `label::before {

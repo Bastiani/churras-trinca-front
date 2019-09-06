@@ -950,10 +950,6 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
 
-"@restart/hooks@^0.3.1":
-  version "0.3.12"
-  resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.3.12.tgz#c68e6b4048d80ab51f6694cb6921bd091318f80f"
-
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-4.2.0.tgz#dadcb6218503532d6884b210e7f3c502caaa44b1"
@@ -8953,12 +8949,6 @@ relay-devtools@^1.4.0:
     electron "^1.6.11"
     update-notifier "^2.2.0"
     ws "^3.1.0"
-
-relay-hooks@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/relay-hooks/-/relay-hooks-1.2.5.tgz#5bfe323be26446dea78ed1a99a32e56decaa81be"
-  dependencies:
-    "@restart/hooks" "^0.3.1"
 
 relay-runtime@5.0.0, relay-runtime@^5.0.0:
   version "5.0.0"

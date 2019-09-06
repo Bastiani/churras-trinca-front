@@ -23,7 +23,6 @@
     "react-scripts": "3.1.1",
     "reakit": "^1.0.0-beta.6",
     "relay-devtools": "^1.4.0",
-    "relay-hooks": "^1.2.5",
     "relay-runtime": "^5.0.0",
     "styled-components": "^4.3.2",
     "typescript": "^3.6.2",

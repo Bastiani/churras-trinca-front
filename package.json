@@ -12,7 +12,7 @@
     "formik": "^1.5.8",
     "hoist-non-react-statics": "^3.3.0",
     "idx": "^2.5.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "react": "^16.9.0",
     "react-datepicker": "^2.9.3",
